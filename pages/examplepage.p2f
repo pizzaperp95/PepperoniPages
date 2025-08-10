@@ -1,0 +1,7 @@
+?! Example file for the p2f format for the Pepperoni Pages static site generator.
+
+P2FORMATVER=0
+
+mdstart
+?inc ../docs/p2f.md
+mdend
