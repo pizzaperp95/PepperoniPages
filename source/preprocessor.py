@@ -8,7 +8,7 @@ import sys
 #p2fversion = sys.argv[2]
 debugMode = False
 
-tempfile = "./temp/file.temp"
+tempfile = "../temp/file.temp"
 openedfile = []
 filename = tempfile
 
@@ -17,7 +17,7 @@ filename = tempfile
 def striplines():
     global openedfile
     # Turn the file into an array, where each element of that array is one line of the file.
-    with open(filename, 'r+', encoding='UTF-8') as file:
+    with open(filename, 'r', encoding='UTF-8') as file:
         openedfile = [line.rstrip('\n') for line in file]
     if debugMode: 
         print(openedfile)
@@ -30,7 +30,7 @@ def include(line, arg0):
     with open(arg0) as file:
         tempIncMD = [line.rstrip('\n') for line in file]
 
-    del openedfile[line]
+    openedfile.pop(line)
     index = line
     for item in tempIncMD:
         openedfile.insert(index, item)
@@ -39,7 +39,7 @@ def include(line, arg0):
 def comment(line):
     global openedfile
 
-    del openedfile[line]
+    openedfile.pop(line)
     if debugMode:
         print("Comment found at line: ", line)
 
@@ -77,6 +77,7 @@ def finishPreprocessing():
 
 # Main function
 def main():
+    # wait.. if theres only one function here, then why don't we just have if __name__=="__main__": call this function instead..?
     parse()
             
 

@@ -1,7 +1,8 @@
 ?! Example file for the p2f format for the Pepperoni Pages static site generator.
 
 P2FORMATVER=0
+template=exampletemplate.html
 
 mdstart
-?inc ../docs/p2f.md
+?inc ./md/example.md
 mdend

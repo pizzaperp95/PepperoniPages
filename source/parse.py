@@ -5,20 +5,53 @@
 
 import sys
 
-filename = sys.argv[1]
+tempfile = "../temp/file.temp"
+filename = tempfile
+debugMode = True
+openedfile = []
 
-def stripComments(_contents):
-    pass
+def striplines():
+    global openedfile
+    # Turn the file into an array, where each element of that array is one line of the file.
+    with open(filename, 'r+', encoding='UTF-8') as file:
+        openedfile = [line.rstrip('\n') for line in file]
+    if debugMode: 
+        print(openedfile)
 
 def parse(_contents):
     pass
 
+def stripAllBeforeMDstart():
+    for i, val in enumerate(openedfile):
+        if val.upper() == "MDSTART":
+            break
+        else:
+            openedfile.pop(i)
+
+# Strips out mdstart and mdend from file. 
+def stripMdTags(): # (and P2FORMATVER cuz i dont wanna rename this function)
+    global openedfile
+    #openedfile = [item for item in openedfile if item.upper() != "MDSTART"]
+    for i, val in enumerate(openedfile):
+        if val.upper() == "MDSTART" or val.upper() == "MDEND" or (val.upper().split("=")[0]) == "P2FORMATVER":
+            openedfile.pop(i)
 
 # Main function, duh.
 def main():
-    with open(filename) as file:
-        while line := file.readline():
-            print(line.rstrip())
+    striplines()
+    stripAllBeforeMDstart()
+    stripMdTags()
+    finishParsing()
+
+def finishParsing():
+    with open(tempfile, 'w', encoding='UTF-8') as file:
+        
+        for items in openedfile:
+            file.write('%s\n' %items)
+    print("Parsing finished successfully.")
+    print(openedfile)
+    for i in range(len(openedfile)):
+        print(openedfile[i])
 
 
 if __name__=="__main__":

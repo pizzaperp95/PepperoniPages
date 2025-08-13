@@ -2,6 +2,8 @@
 
 Every p2f file must include a *P2FORMATVER* variable. this tells the generator how to parse the file. The latest format version is 0.
 
+
+
 ### Variables
 
 Variables are very simple, and lack much purpose. 
@@ -16,6 +18,8 @@ In the P2F 0 standard, variables are only used for setting the P2Format version.
 
 **WARNING:** Variables cannot be set inside the MD source of the file.
 
+
+
 ### Creating your page contents
 
 Once basic setup is complete, you will want to add content to your page. This is done by embedding markdown into the file. 
@@ -25,6 +29,8 @@ To do this, you must type ```mdstart``` into your file. This will tell the parse
 Comments in the non-markdown sections of the file can be added be prefixing the line with ```!!``` . 
 
 **WARNING:** Comments cannot start anywhere but the first character of a line, because the parser goes through every single line in the file, and if the first two characters of that line are equal to ```["?", "!"]``` respectively, that **entire** line is removed.
+
+
 
 ### Generator commands
 
@@ -58,6 +64,10 @@ These variables are:
 | ----------- | ------------- | ----------------------------------------------------- |
 | P2FORMATVER | 0             | Sets the version of the P2F for the generator to use. |
 
+
+
 ### Generation
 
 When the generator generates the pages, it parses the page file, takes the text from inbetween ```mdstart``` and ```mdend``` and converts it to HTML.
+
+
