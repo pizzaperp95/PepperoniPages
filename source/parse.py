@@ -7,7 +7,7 @@ import sys
 
 tempfile = "../temp/file.temp"
 filename = tempfile
-debugMode = True
+debugMode = False
 openedfile = []
 
 def striplines():
@@ -49,7 +49,6 @@ def finishParsing():
         for items in openedfile:
             file.write('%s\n' %items)
     print("Parsing finished successfully.")
-    print(openedfile)
     for i in range(len(openedfile)):
         print(openedfile[i])
 

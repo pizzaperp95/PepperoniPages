@@ -8,31 +8,37 @@ import os
 import shutil
 import subprocess
 from pathlib import Path
+from enum import Enum
 
-filename = sys.argv[1]
+filename = ""
 p2formatver = 0
 openedfile = []
 template = ""
 tempfile = "../temp/file.temp"
-debugMode = True
+debugMode = False
 fileexportpath = Path("./")
+batchpath = ""
+
+class mode(Enum):
+    SINGLE = 0
+    BATCH = 1
+
+ppagesMode = mode.SINGLE
 
 # Main function
 def main():
+    global template
+    global filename
+
+    handleArgs()
+
+    file_path = Path(batchpath)
+    
     os.chdir('../pages')
-    setFileOutput()
-    if not (os.path.exists("../temp")): os.mkdir("../temp")
+    for f in file_path.rglob('*.p2f'): 
+        filename = f
+        pepperoniPages()
 
-    if (os.path.exists(tempfile)):
-        os.remove(tempfile)
-    path = shutil.copy(filename,tempfile)
-    striplines(filename)
-    getp2fver()
-    getTemplate()
-
-    subprocess.run(["python", "../source/preprocessor.py", filename])
-    subprocess.run(["python", "../source/parse.py", filename])
-    finish()
             
 def getp2fver():
     global p2formatver
@@ -43,8 +49,29 @@ def getp2fver():
             line = val.split('=')
             if (line[0].upper() == "P2FORMATVER"):
                 p2formatver = line[1]
-                #openedfile.pop(i)
+                openedfile.pop(i)
                 if debugMode: print("P2Format Version set to:", p2formatver)
+
+def pepperoniPages():
+    global template
+    global filename
+
+    setFileOutput()
+    if not (os.path.exists("../temp")): os.mkdir("../temp")
+
+    if (os.path.exists(tempfile)):
+        os.remove(tempfile)
+    path = shutil.copy(filename,tempfile)
+
+    striplines(filename)
+    getp2fver()
+    getTemplate()
+
+    subprocess.run(["python", "../source/preprocessor.py", filename])
+    subprocess.run(["python", "../source/parse.py", filename])
+    subprocess.run(["python", "../source/htmlinator.py", template])
+    finish()
+
 
 def getTemplate():
     global openedfile
@@ -54,9 +81,9 @@ def getTemplate():
         if len(val) > 0:
             line = val.split('=')
             if (line[0] == "template"):
-                p2formatver = line[1]
-                openedfile.pop(i)
-                if debugMode: print("Template:", p2formatver)
+                template = line[1]
+                #openedfile.pop(i)
+                if debugMode: print("Template:", template)
 
 def striplines(file):
     global openedfile
@@ -87,6 +114,42 @@ def finish():
     except OSError as e:
         print(f"error: {e.filename} - {e.strerror}.")
 
+def handleArgs(): # Arrgg!!! (yes theres much better ways of handling arguments, but this is good enough for now.)
+    global ppagesMode
+    global  batchpath
+    global filename
+
+    if 2 > len(sys.argv):
+        print("ERROR: No first argument supplied!")
+        exit()
+
+    if 3 > len(sys.argv):
+        print("ERROR: No second argument supplied!")
+        exit()
+
+    arg1 = sys.argv[1]
+    arg2 = sys.argv[2]
+
+    match  arg1:
+        case "-batch":
+            ppagesMode = mode.BATCH
+        case "-b":
+            ppagesMode = mode.BATCH
+        case "-single":
+            ppagesMode = mode.SINGLE
+        case "-s":
+            ppagesMode = mode.SINGLE
+        case _:
+            print("ERROR: invalid first argument!")
+            sys.exit()
+
+    batchpath = arg2
+    filename = arg2
+    
+
+
+                
+              
 
 if __name__=="__main__":
     main()
