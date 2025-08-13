@@ -22,7 +22,7 @@ Once basic setup is complete, you will want to add content to your page. This is
 
 To do this, you must type ```mdstart``` into your file. This will tell the parser everything from here until ```mdend``` is the contents of the page.
 
-Comments in the non-markdown sections of the file can be added be prefixing the line with ```!!``` . 
+Comments in the non-markdown sections of the file can be added be prefixing the line with ```?!``` . 
 
 **WARNING:** Comments cannot start anywhere but the first character of a line, because the parser goes through every single line in the file, and if the first two characters of that line are equal to ```["?", "!"]``` respectively, that **entire** line is removed.
 
