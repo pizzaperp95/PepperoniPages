@@ -65,4 +65,4 @@ These variables are:
 
 ### Generation
 
-When the generator generates the pages, it parses the page file, takes the text from inbetween ```mdstart``` and ```mdend``` and converts it to HTML.
+When the generator generates the pages, it parses the page file, takes the text from inbetween ```mdstart``` and ```mdend``` and converts it to HTML. It then appends that to the template file, replacing ```<pepperonipages>```.
