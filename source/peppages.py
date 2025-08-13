@@ -1,6 +1,6 @@
 # (c) 2025 Pizza https://pizza.syntropicinteractive.com/
 # This code is licensed under MIT license (see LICENSE.txt for details)
-# Pepperoni Pages Version 0.1
+# Pepperoni Pages Version 0.2
 # Gets the P2Format Version and starts the other processes.
 
 import sys
@@ -108,6 +108,8 @@ def finish():
     striplines(tempfile)
     global fileexportpath
     fileexportpath.parent.mkdir(exist_ok=True, parents=True)
+    if (os.path.exists(fileexportpath)):
+        os.remove(fileexportpath)
     path = shutil.copy("../temp/file.temp", fileexportpath)
         
 
