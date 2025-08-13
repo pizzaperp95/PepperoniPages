@@ -10,8 +10,8 @@ Processing an entire folder: ``` python peppages.py -b ./```
 
 ## Documentation:
 
-[Writing Pages](docs/p2f)
+[Writing Pages](docs/p2f.md)
 
-[Writing Templates](docs/templates)
+[Writing Templates](docs/templates.md)
 
 
