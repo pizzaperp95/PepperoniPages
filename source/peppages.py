@@ -32,11 +32,14 @@ def main():
 
     handleArgs()
 
-    file_path = Path(batchpath)
-    
     os.chdir('../pages')
-    for f in file_path.rglob('*.p2f'): 
-        filename = f
+    if ppagesMode == mode.BATCH:
+        file_path = Path(batchpath)
+    
+        for f in file_path.rglob('*.p2f'): 
+            filename = f
+            pepperoniPages()
+    elif ppagesMode == mode.SINGLE:
         pepperoniPages()
 
             
