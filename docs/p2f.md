@@ -59,7 +59,7 @@ These variables are:
 | P2FORMATVER | 0             | Sets the version of the P2F for the generator to use. |
 | template    | N/A           | Sets the template file for the generator to use.      |
 
-template variable quirk (version 0): if this variable is not set in the next file while doing batch processing, it wont be changed, meaning that file will use the same template as the one processed before it.
+**template variable quirk (version 0):** if this variable is not set in the next file while doing batch processing, it wont be changed, meaning that file will use the same template as the one processed before it.
 
 
 
