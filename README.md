@@ -15,3 +15,5 @@ Processing an entire folder: ``` python peppages.py -b ./```
 [Writing Templates](docs/templates.md)
 
 
+
+Examples may be found in [examples.](examples)
