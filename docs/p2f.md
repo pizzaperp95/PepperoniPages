@@ -42,7 +42,7 @@ Comments in the non-markdown sections of the file can be added be prefixing the 
 | ?!        | N/A              | Marks a line of the file to be removed by the preprocessor.                   |
 | ?inc      | File to include. | Tells the preprocessor to open a file and paste its contents at its location. |
 
-#### How to use the ```!inc``` preprocessor directive
+#### How to use the ```?inc``` preprocessor directive
 
  Example: ```?inc ./path/to/file/file.md``` 
 
