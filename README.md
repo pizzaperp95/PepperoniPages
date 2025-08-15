@@ -16,6 +16,7 @@ Extract the latest release into whatever folder you please, then put any pages/t
 
 ### Requirements:
 **Python 3.13 or greater.**
+
 **Markdown**
 
 (requirements.txt coming soon)
