@@ -70,9 +70,9 @@ def pepperoniPages():
     getp2fver()
     getTemplate()
 
-    subprocess.run(["python", "../source/preprocessor.py", filename])
-    subprocess.run(["python", "../source/parse.py", filename])
-    subprocess.run(["python", "../source/htmlinator.py", template])
+    subprocess.run(["python", "../source/preprocessor.py", filename, debugMode])
+    subprocess.run(["python", "../source/parse.py", filename, debugMode])
+    subprocess.run(["python", "../source/htmlinator.py", template, debugMode])
     finish()
 
 
@@ -93,8 +93,6 @@ def striplines(file):
     # Turn the file into an array, where each element of that array is one line of the file.
     with open(file, 'r+', encoding='UTF-8') as file:
         openedfile = [line.rstrip('\n') for line in file]
-    if debugMode: 
-        print(openedfile)
 
 def setFileOutput():
     global fileexportpath
@@ -134,6 +132,7 @@ def handleArgs(): # Arrgg!!! (yes theres much better ways of handling arguments,
 
     arg1 = sys.argv[1]
     arg2 = sys.argv[2]
+    arg3 = sys.argv[3]
 
     match  arg1:
         case "-batch":
@@ -150,6 +149,9 @@ def handleArgs(): # Arrgg!!! (yes theres much better ways of handling arguments,
 
     batchpath = arg2
     filename = arg2
+
+    if (arg3.upper == "-debug"):
+        debugMode = True
     
 
 

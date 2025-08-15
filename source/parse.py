@@ -7,7 +7,7 @@ import sys
 
 tempfile = "../temp/file.temp"
 filename = tempfile
-debugMode = False
+debugMode = sys.argv[2]
 openedfile = []
 
 def striplines():
@@ -15,8 +15,6 @@ def striplines():
     # Turn the file into an array, where each element of that array is one line of the file.
     with open(filename, 'r+', encoding='UTF-8') as file:
         openedfile = [line.rstrip('\n') for line in file]
-    if debugMode: 
-        print(openedfile)
 
 def parse(_contents):
     pass

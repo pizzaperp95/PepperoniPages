@@ -9,7 +9,7 @@ import os
 
 tempfile = "../temp/file.temp"
 filename = tempfile
-debugMode = False
+debugMode = sys.argv[2]
 openedfile = []
 template = sys.argv[1]
 htmlsource = ""
@@ -29,7 +29,6 @@ def tohtml():
     with open(filename, 'r') as file:
         filecontent = file.read()
     htmlsource = markdown.markdown(filecontent, extensions=['tables'])
-    if debugMode: print(htmlsource)
 
     for i, val in enumerate(templatefile):
         if len(val) > 0:

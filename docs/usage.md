@@ -15,9 +15,11 @@ Argument 1 is the processing type. (batch, single)
 Argument 2 is the file path.
 
 
+
 ## Arguments:
 
 | Argument     | Function                                    |
 | ------------ | ------------------------------------------- |
 | -b / -batch  | Makes the generator do a batch generation.  |
 | -s / -single | Makes the generator do a single generation. |
+| -debug       | Turns on debug mode. **must be last argument.** |

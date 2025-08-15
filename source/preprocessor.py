@@ -6,7 +6,7 @@
 import sys
 
 #p2fversion = sys.argv[2]
-debugMode = False
+debugMode = sys.argv[2]
 
 tempfile = "../temp/file.temp"
 openedfile = []
@@ -19,8 +19,6 @@ def striplines():
     # Turn the file into an array, where each element of that array is one line of the file.
     with open(filename, 'r', encoding='UTF-8') as file:
         openedfile = [line.rstrip('\n') for line in file]
-    if debugMode: 
-        print(openedfile)
 
 def include(line, arg0):
     global openedfile
