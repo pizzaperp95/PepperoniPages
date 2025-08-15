@@ -5,9 +5,16 @@
 
 import sys
 
+def str_to_bool(str):
+    if (str.upper() == "TRUE"):
+        return True
+    else:
+        return False
+
+debugMode = str_to_bool(sys.argv[2])
+
 tempfile = "../temp/file.temp"
 filename = tempfile
-debugMode = sys.argv[2]
 openedfile = []
 
 def striplines():

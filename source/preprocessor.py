@@ -5,8 +5,13 @@
 
 import sys
 
-#p2fversion = sys.argv[2]
-debugMode = sys.argv[2]
+def str_to_bool(str):
+    if (str.upper() == "TRUE"):
+        return True
+    else:
+        return False
+
+debugMode = str_to_bool(sys.argv[2])
 
 tempfile = "../temp/file.temp"
 openedfile = []

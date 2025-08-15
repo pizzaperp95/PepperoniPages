@@ -70,9 +70,9 @@ def pepperoniPages():
     getp2fver()
     getTemplate()
 
-    subprocess.run(["python", "../source/preprocessor.py", filename, debugMode])
-    subprocess.run(["python", "../source/parse.py", filename, debugMode])
-    subprocess.run(["python", "../source/htmlinator.py", template, debugMode])
+    subprocess.run(["python", "../source/preprocessor.py", filename, str(debugMode)])
+    subprocess.run(["python", "../source/parse.py", filename, str(debugMode)])
+    subprocess.run(["python", "../source/htmlinator.py", template, str(debugMode)])
     finish()
 
 
