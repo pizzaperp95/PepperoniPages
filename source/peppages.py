@@ -132,7 +132,9 @@ def handleArgs(): # Arrgg!!! (yes theres much better ways of handling arguments,
 
     arg1 = sys.argv[1]
     arg2 = sys.argv[2]
-    arg3 = sys.argv[3]
+    arg3 = ""
+    if not (4 > len(sys.argv)):
+        arg3 = sys.argv[3]
 
     match  arg1:
         case "-batch":
