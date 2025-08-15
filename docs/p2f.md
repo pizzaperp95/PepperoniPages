@@ -61,6 +61,8 @@ These variables are:
 
 **template variable quirk (version 0):** if this variable is not set in the next file while doing batch processing, it wont be changed, meaning that file will use the same template as the one processed before it.
 
+Currently, P2FORMATVER doesn't do anything, but it is recommended that it is set in your pages for compatibility with future versions.
+
 ### Generation
 
 When the generator generates the pages, it parses the page file, takes the text from inbetween ```mdstart``` and ```mdend``` and converts it to HTML. It then appends that to the template file, replacing ```<pepperonipages>```.
