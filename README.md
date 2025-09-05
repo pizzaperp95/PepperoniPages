@@ -30,3 +30,9 @@ Extract the latest release into whatever folder you please, then put any pages/t
 [More usage](docs/usage.md)
 
 Examples may be found in [examples.](examples)
+
+### Planned features:
+
+Title variable; This makes it dead simple to add titles to your pages. Doesn't require any HTML in your pages, and a default can be set per-template.
+
+Last updated variables; This allows you to put a tag anywhere which the site generator replaces with the date and/or time of the last update to the page.
