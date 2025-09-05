@@ -1,6 +1,6 @@
 # Pepperoni Pages
 
-### usage:
+## usage:
 
 First: CD into the /source folder containing peppages.py.
 
@@ -31,7 +31,7 @@ Extract the latest release into whatever folder you please, then put any pages/t
 
 Examples may be found in [examples.](examples)
 
-### Planned features:
+## Planned features:
 
 Title variable; This makes it dead simple to add titles to your pages. Doesn't require any HTML in your pages, and a default can be set per-template.
 
