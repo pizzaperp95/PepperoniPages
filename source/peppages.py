@@ -1,6 +1,6 @@
 # (c) 2025 Pizza https://pizza.syntropicinteractive.com/
 # This code is licensed under MIT license (see LICENSE.txt for details)
-# Pepperoni Pages Version 0.2
+# Pepperoni Pages Version 0.3
 # Gets the P2Format Version and starts the other processes.
 
 import sys
@@ -12,6 +12,8 @@ from enum import Enum
 
 filename = ""
 p2formatver = 0
+MaxP2F = 1 # Sets the maximum compatible version of P2F.
+MinP2F = 0 # Sets the minimum compatible version of P2F.
 openedfile = []
 template = ""
 tempfile = "../temp/file.temp"
@@ -51,7 +53,8 @@ def getp2fver():
         if len(val) > 0:
             line = val.split('=')
             if (line[0].upper() == "P2FORMATVER"):
-                p2formatver = line[1]
+                p2formatver = int(line[1])
+                checkCompatibleP2FVer(p2formatver)
                 openedfile.pop(i)
                 if debugMode: print("P2Format Version set to:", p2formatver)
 
@@ -70,6 +73,7 @@ def pepperoniPages():
     getp2fver()
     getTemplate()
 
+    subprocess.run(["python", "../source/templateparse.py", template, str(debugMode)])
     subprocess.run(["python", "../source/preprocessor.py", filename, str(debugMode)])
     subprocess.run(["python", "../source/parse.py", filename, str(debugMode)])
     subprocess.run(["python", "../source/htmlinator.py", template, str(debugMode)])
@@ -155,7 +159,16 @@ def handleArgs(): # Arrgg!!! (yes theres much better ways of handling arguments,
     if (arg3.upper == "-debug"):
         debugMode = True
     
-
+def checkCompatibleP2FVer(p2fver): # Checks the P2F version to make sure its fully compatible with this version of Pep. Pages.
+    
+    if(p2fver > MaxP2F):
+        print("ERROR: Incompatible P2F version!")
+        print("P2F version too high, expected ≤ P2F ", MaxP2F, ", got: ", p2fver)
+        exit(1)
+    if(p2fver > MaxP2F):
+       print("ERROR: Incompatible P2F version!")
+       print("P2F version too low, expected ≥ P2F ", MinP2F, ", got: ", p2fver)
+       exit(1)
 
                 
               

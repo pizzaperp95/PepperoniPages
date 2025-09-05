@@ -1,69 +1,103 @@
+<!--
+Template file example for Pepperoni Pages
+-->
 
-# The P2F format (P<sup>2</sup>epperoni pages Format)
-
-Every p2f file must include a *P2FORMATVER* variable. this tells the generator how to parse the file. The latest format version is 0.
-
-### Variables
-
-Variables are very simple, and lack much purpose. 
-
-Example: ```VariableName=value``` 
-
-VariableName is self-explanatory, it is the variable's name. 
-
-value is also simple, just replace this with whatever value you want to set.
-
-In the P2F 0 standard, variables are only used for setting the P2Format version, and the template file.
-
-**WARNING:** Variables cannot be set inside the MD source of the file.
-
-### Creating your page contents
-
-Once basic setup is complete, you will want to add content to your page. This is done by embedding markdown into the file. 
-
-To do this, you must type ```mdstart``` into your file. This will tell the parser everything from here until ```mdend``` is the contents of the page.
-
-Comments in the non-markdown sections of the file can be added be prefixing the line with ```?!``` . 
-
-**WARNING:** Comments cannot start anywhere but the first character of a line, because the parser goes through every single line in the file, and if the first two characters of that line are equal to ```["?", "!"]``` respectively, that **entire** line is removed.
-
-### Generator commands
-
-| Command | Arg0 | Arg1 | Purpose                                                  |
-| ------- | ---- | ---- | -------------------------------------------------------- |
-| mdstart | N/A  | N/A  | Marks the beginning of the markdown portion of the file. |
-| mdend   | N/A  | N/A  | Marks the end of the markdown portion of the file.       |
-
-### 
-
-### Generator pre-processor directives
-
-| Directive | Arg0             | Purpose                                                                       |
-| --------- | ---------------- | ----------------------------------------------------------------------------- |
-| ?!        | N/A              | Marks a line of the file to be removed by the preprocessor.                   |
-| ?inc      | File to include. | Tells the preprocessor to open a file and paste its contents at its location. |
-
-#### How to use the ```?inc``` preprocessor directive
-
- Example: ```?inc ./path/to/file/file.md``` 
-
-There should be nothing before,  or after your include statement on that line.
-
-### Generator variables
-
-The generator's behavior may be modified using variables.
-
-These variables are:
-
-| Variable    | Default Value | Purpose                                               |
-| ----------- | ------------- | ----------------------------------------------------- |
-| P2FORMATVER | 0             | Sets the version of the P2F for the generator to use. |
-| template    | N/A           | Sets the template file for the generator to use.      |
-
-**template variable quirk (version 0):** if this variable is not set in the next file while doing batch processing, it wont be changed, meaning that file will use the same template as the one processed before it.
-
-Currently, P2FORMATVER doesn't do anything, but it is recommended that it is set in your pages for compatibility with future versions.
-
-### Generation
-
-When the generator generates the pages, it parses the page file, takes the text from inbetween ```mdstart``` and ```mdend``` and converts it to HTML. It then appends that to the template file, replacing ```<pepperonipages>```.
+<head>
+    <body>
+        <p>This is an example template for the Pepperoni Pages Static Site Generator.</p>
+<h1>The P2F format (P<sup>2</sup>epperoni pages Format)</h1>
+<p>Every p2f file must include a <em>P2FORMATVER</em> variable. this tells the generator how to parse the file. The latest format version is 0.</p>
+<h3>Variables</h3>
+<p>Variables are very simple, and lack much purpose. </p>
+<p>Example: <code>VariableName=value</code> </p>
+<p>VariableName is self-explanatory, it is the variable's name. </p>
+<p>value is also simple, just replace this with whatever value you want to set.</p>
+<p>In the P2F 0 standard, variables are only used for setting the P2Format version, and the template file.</p>
+<p><strong>WARNING:</strong> Variables cannot be set inside the MD source of the file.</p>
+<h3>Creating your page contents</h3>
+<p>Once basic setup is complete, you will want to add content to your page. This is done by embedding markdown into the file. </p>
+<p>To do this, you must type <code>mdstart</code> into your file. This will tell the parser everything from here until <code>mdend</code> is the contents of the page.</p>
+<p>Comments in the non-markdown sections of the file can be added be prefixing the line with <code>?!</code> . </p>
+<p><strong>WARNING:</strong> Comments cannot start anywhere but the first character of a line, because the parser goes through every single line in the file, and if the first two characters of that line are equal to <code>["?", "!"]</code> respectively, that <strong>entire</strong> line is removed.</p>
+<h3>Generator commands</h3>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Arg0</th>
+<th>Arg1</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>mdstart</td>
+<td>N/A</td>
+<td>N/A</td>
+<td>Marks the beginning of the markdown portion of the file.</td>
+</tr>
+<tr>
+<td>mdend</td>
+<td>N/A</td>
+<td>N/A</td>
+<td>Marks the end of the markdown portion of the file.</td>
+</tr>
+</tbody>
+</table>
+<h3></h3>
+<h3>Generator pre-processor directives</h3>
+<table>
+<thead>
+<tr>
+<th>Directive</th>
+<th>Arg0</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>?!</td>
+<td>N/A</td>
+<td>Marks a line of the file to be removed by the preprocessor.</td>
+</tr>
+<tr>
+<td>?inc</td>
+<td>File to include.</td>
+<td>Tells the preprocessor to open a file and paste its contents at its location.</td>
+</tr>
+</tbody>
+</table>
+<h4>How to use the <code>?inc</code> preprocessor directive</h4>
+<p>Example: <code>?inc ./path/to/file/file.md</code> </p>
+<p>There should be nothing before,  or after your include statement on that line.</p>
+<h3>Generator variables</h3>
+<p>The generator's behavior may be modified using variables.</p>
+<p>These variables are:</p>
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Default Value</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>P2FORMATVER</td>
+<td>0</td>
+<td>Sets the version of the P2F for the generator to use.</td>
+</tr>
+<tr>
+<td>template</td>
+<td>N/A</td>
+<td>Sets the template file for the generator to use.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>template variable quirk (version 0):</strong> if this variable is not set in the next file while doing batch processing, it wont be changed, meaning that file will use the same template as the one processed before it.</p>
+<p>Currently, P2FORMATVER doesn't do anything, but it is recommended that it is set in your pages for compatibility with future versions.</p>
+<h3>Generation</h3>
+<p>When the generator generates the pages, it parses the page file, takes the text from inbetween <code>mdstart</code> and <code>mdend</code> and converts it to HTML. It then appends that to the template file, replacing <code>&lt;pepperonipages&gt;</code>.</p>
+            <p>Document end. Goodbye!</p>
+    </body>
+</head>

@@ -1,15 +1,10 @@
 # (c) 2025 Pizza https://pizza.syntropicinteractive.com/
 # This code is licensed under MIT license (see LICENSE.txt for details)
-# Pepperoni Pages P2F Pre-Processor Version 0.1
+# Pepperoni Pages P2F Pre-Processor Version 0.2
 # Handles the preprocessor directives.
 
 import sys
-
-def str_to_bool(str):
-    if (str.upper() == "TRUE"):
-        return True
-    else:
-        return False
+from peplib import *
 
 debugMode = str_to_bool(sys.argv[2])
 

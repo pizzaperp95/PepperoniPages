@@ -1,17 +1,12 @@
 # (c) 2025 Pizza https://pizza.syntropicinteractive.com/
 # This code is licensed under MIT license (see LICENSE.txt for details)
-# Pepperoni Pages HTMLinator Version 0.1
+# Pepperoni Pages HTMLinator Version 0.2
 # Turns the file into HTML, then inserts it into the template.
 
 import sys
 import markdown
 import os
-
-def str_to_bool(str):
-    if (str.upper() == "TRUE"):
-        return True
-    else:
-        return False
+from peplib import *
 
 debugMode = str_to_bool(sys.argv[2])
 
