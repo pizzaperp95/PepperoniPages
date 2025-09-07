@@ -33,6 +33,6 @@ Examples may be found in [examples.](examples)
 
 ## Planned features:
 
-Title variable; This makes it dead simple to add titles to your pages. Doesn't require any HTML in your pages, and a default can be set per-template.
+Metadata templates; Acts like page templates, but has site metadata inside instead. A default can be set per page template.
 
 Last updated variables; This allows you to put a tag anywhere which the site generator replaces with the date and/or time of the last update to the page.
