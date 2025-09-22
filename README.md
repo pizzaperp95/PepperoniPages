@@ -36,3 +36,7 @@ Examples may be found in [examples.](examples)
 Metadata templates; Acts like page templates, but has site metadata inside instead. A default can be set per page template.
 
 Last updated variables; This allows you to put a tag anywhere which the site generator replaces with the date and/or time of the last update to the page.
+
+### TODO:
+
+Rewrite this whole codebase, its gettin' realll messy up in here.
