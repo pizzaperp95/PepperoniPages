@@ -1,0 +1,29 @@
+P2FORMATVER=0
+
+template=template.html
+
+mdstart
+# My projects
+
+# In progress:
+
+Right now I'm working on a game in the Godot engine, and it's coming along really well!
+
+I am also working on a 3D printed replica of many of the Chuck e. Cheese animatronics. More info [here.](ceccyber/index.html)
+
+Although currently postponed, I was working on a mod for <i>Half-Life 2</i>, which was to be like if you mixed <i>Half-Life 2: Deathmatch</i> and <i>the Hunger Games</i>. 24 players, battle-royale style, with <i>Half-Life 2</i> weapons.
+
+# Completed:
+
+### Pepperoni Pages:
+Pepperoni Pages is an MIT licensed static site generator, used to create this very site!
+
+More info can be found in the [GitHub,](https://github.com/pizzaperp95/PepperoniPages) or at the [Pepperoni Pages official page](https://syntropicinteractive.com/peppages)
+
+
+### Pneumatic Plaything:
+Pneumatic Plaything is an "Animatronic Simulator" game, a type of game where you get to play showtapes, files which contain animation and sound data, on old animatronics, such as the ones from Chuck E. Cheese's.
+I implemented the settings menu, the Discord rich presense system, and am currently working on adding a VR mode to the game, which is in the latest prerelease, although, not finished.
+
+Play [Pneumatic Plaything](https://git.kawaiizenbo.me/kawaiizenbo/PneumaticPlaything/releases)
+mdend

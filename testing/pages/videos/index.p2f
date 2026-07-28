@@ -1,0 +1,10 @@
+P2FORMATVER=0
+
+template=template.html
+
+mdstart
+# Videos
+Coming Soon!
+
+In the mean time, you can watch videos on my YouTube channel. It's on the sidebar. :3
+mdend

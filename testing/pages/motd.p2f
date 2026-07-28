@@ -1,0 +1,19 @@
+P2FORMATVER=0
+
+template=template_minimal.html
+
+mdstart
+<br>
+<br>
+<br>
+Please keep this server friendly for all!
+
+We will not tolerate any sort of discrimination. You will be banned.
+
+Have fun!
+
+# Special thanks:
+
+This server uses maps optimized by Shounic for his *"Trenches"* servers.
+
+mdend
