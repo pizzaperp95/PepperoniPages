@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"slices"
 	"strings"
 
@@ -15,7 +16,8 @@ import (
 )
 
 var templatePath string = ""
-var serverRoot string = "../testing"
+var serverRoot string = "../server"
+var serverPaths = []string{"static", "cache", "pages"}
 
 func remove(arr []string, s int) []string {
 	var newArr []string
@@ -27,14 +29,68 @@ func remove(arr []string, s int) []string {
 	return newArr
 }
 
+func getFileDirectoryAndType(response http.ResponseWriter, request *http.Request) string {
+	var returnPath string = ""
+	var fileFound bool = false
+	var splitPath []string = strings.Split(request.URL.Path, "/")
+	var fileExt string
+	var fileName string
+	if len(strings.Split(splitPath[len(splitPath)-1], ".")) == 2 {
+		fileExt = strings.Split(splitPath[len(splitPath)-1], ".")[1]
+	} else {
+		fileExt = ""
+	}
+	fileName = strings.Split(splitPath[len(splitPath)-1], ".")[0]
+	fmt.Println("fileext: ", fileExt, " filename: ", fileName)
+
+	if request.URL.Path[len(request.URL.Path)-1:] == "/" {
+		returnPath = (request.URL.Path + "/index")
+	}
+
+	var pathNoExt []string
+	for _, seg := range splitPath {
+		if len(strings.Split(seg, ".")[0]) > 0 {
+			pathNoExt = append(pathNoExt, strings.Split(seg, ".")[0])
+		}
+	}
+	fmt.Println(pathNoExt)
+
+	if _, err := os.Stat("/path/to/whatever"); err == nil {
+		fileFound = true
+
+	} else if errors.Is(err, os.ErrNotExist) {
+		fileFound = false
+	} else {
+		fileFound = false
+	}
+
+	if !fileFound {
+		http.Error(response, reqErr404(), http.StatusNotFound)
+		return (reqErr404())
+	} else {
+		return (returnPath)
+	}
+}
+
+func reqErr404() string {
+	errMsg := ""
+	var returnPath string = serverRoot + "/static/404.html"
+	data, err := os.ReadFile(returnPath)
+	if err != nil {
+		errMsg = http.StatusText(http.StatusNotFound)
+	} else {
+		errMsg = string(data)
+	}
+
+	return errMsg
+}
+
 func peppagesHandler(response http.ResponseWriter, request *http.Request) {
 	fmt.Println(request.URL.Path)
 	//response.Header().Set("Content-Type", "text/html")
-	if request.URL.Path[len(request.URL.Path)-1:] == "/" {
-		fmt.Fprintf(response, generatePage(("../testing/pages" + request.URL.Path + "/index.p2f")))
-	} else {
-		fmt.Fprintf(response, generatePage(("../testing/pages" + request.URL.Path + ".p2f")))
-	}
+	getFileDirectoryAndType(response, request)
+	//fmt.Fprintf(response, generatePage())
+
 }
 
 func generatePage(page string) string {

@@ -1,0 +1,10 @@
+P2FORMATVER=0
+
+template=template.html
+
+mdstart
+# Current archive server status:
+
+## The archive server will be down for a little bit \(more like a long while\) for maintenance and upgrades. sorries!
+
+mdend
