@@ -5,6 +5,8 @@ import (
 	"slices"
 	"strings"
 
+	"github.com/h2non/filetype"
+
 	"github.com/gomarkdown/markdown"
 	"github.com/gomarkdown/markdown/html"
 	"github.com/gomarkdown/markdown/parser"
@@ -29,47 +31,123 @@ func remove(arr []string, s int) []string {
 	return newArr
 }
 
-func getFileDirectoryAndType(response http.ResponseWriter, request *http.Request) string {
-	var returnPath string = ""
+func getMime(fileExt string) string {
+	//fmt.Println(fileExt)
+	switch fileExt {
+	case "css":
+		return "text/css"
+	case "js":
+		return "application/javascript"
+	default:
+		return "text/plain"
+	}
+}
+
+func getFileDirectoryAndType(response http.ResponseWriter, request *http.Request) {
+	var filePath string = ""
 	var fileFound bool = false
-	var splitPath []string = strings.Split(request.URL.Path, "/")
 	var fileExt string
 	var fileName string
+	var fileTypeIsPage bool = false
+	//var returnStr string = ""
+	//var fileFoundDir string
+	var fileFoundPath string
+	var foundFileExt string
+
+	if request.URL.Path[len(request.URL.Path)-1:] == "/" {
+		filePath = (request.URL.Path + "/index")
+	} else {
+		filePath = request.URL.Path
+	}
+
+	var splitPath []string = strings.Split(filePath, "/")
+
 	if len(strings.Split(splitPath[len(splitPath)-1], ".")) == 2 {
 		fileExt = strings.Split(splitPath[len(splitPath)-1], ".")[1]
 	} else {
 		fileExt = ""
 	}
+
+	if fileExt == "" || fileExt == "html" {
+		fileTypeIsPage = true
+	}
+
 	fileName = strings.Split(splitPath[len(splitPath)-1], ".")[0]
 	fmt.Println("fileext: ", fileExt, " filename: ", fileName)
 
-	if request.URL.Path[len(request.URL.Path)-1:] == "/" {
-		returnPath = (request.URL.Path + "/index")
-	}
-
 	var pathNoExt []string
+	var pathNoExtStr string
 	for _, seg := range splitPath {
 		if len(strings.Split(seg, ".")[0]) > 0 {
 			pathNoExt = append(pathNoExt, strings.Split(seg, ".")[0])
+			pathNoExtStr = strings.Join([]string{pathNoExtStr, strings.Split(seg, ".")[0]}, "/")
 		}
 	}
-	fmt.Println(pathNoExt)
 
-	if _, err := os.Stat("/path/to/whatever"); err == nil {
-		fileFound = true
+	//fmt.Println(pathNoExt, pathNoExtStr)
 
-	} else if errors.Is(err, os.ErrNotExist) {
-		fileFound = false
-	} else {
-		fileFound = false
+	for _, seg := range serverPaths {
+		fmt.Println(seg)
+		var workingExt string
+		if fileTypeIsPage {
+			workingExt = "html"
+			if seg == "pages" {
+				workingExt = "p2f"
+			}
+		} else {
+			workingExt = fileExt
+		}
+		//fmt.Println(serverRoot + "/" + seg + pathNoExtStr + "." + workingExt)
+		if _, err := os.Stat(serverRoot + "/" + seg + pathNoExtStr + "." + workingExt); err == nil {
+			fileFound = true
+			//fileFoundDir = seg
+			foundFileExt = workingExt
+			fileFoundPath = serverRoot + "/" + seg + pathNoExtStr + "." + workingExt
+			break
+
+		} else if errors.Is(err, os.ErrNotExist) {
+			fileFound = false
+		} else {
+			fileFound = false
+		}
 	}
 
 	if !fileFound {
 		http.Error(response, reqErr404(), http.StatusNotFound)
-		return (reqErr404())
+		fmt.Fprintf(response, reqErr404())
+		return
 	} else {
-		return (returnPath)
+		if fileTypeIsPage {
+			if foundFileExt == "p2f" {
+				fmt.Fprintf(response, generatePage(fileFoundPath))
+			} else {
+				data, err := os.ReadFile(fileFoundPath)
+				if err != nil {
+					return
+				}
+				fmt.Fprintf(response, string(data))
+
+			}
+
+		} else {
+			data, err := os.ReadFile(fileFoundPath)
+			if err != nil {
+				return
+			}
+			kind, _ := filetype.Match(data)
+			response.Header().Set("Content-Type", getMime(fileExt))
+			if kind == filetype.Unknown {
+				response.Write(data)
+				//fmt.Fprintf(response, string(data))
+			} else {
+				response.Write(data)
+			}
+			response.Write(data)
+			//fmt.Fprintf(response, string(data))
+		}
 	}
+	//fmt.Println(fileFoundDir)
+	return
 }
 
 func reqErr404() string {
@@ -86,7 +164,7 @@ func reqErr404() string {
 }
 
 func peppagesHandler(response http.ResponseWriter, request *http.Request) {
-	fmt.Println(request.URL.Path)
+	//fmt.Println(request.URL.Path)
 	//response.Header().Set("Content-Type", "text/html")
 	getFileDirectoryAndType(response, request)
 	//fmt.Fprintf(response, generatePage())
@@ -102,11 +180,12 @@ func generatePage(page string) string {
 	var md []byte = []byte(parseP2F(string(data)))
 	var html []byte = mdToHTML(md)
 	var pageOut string = insertIntoTemplate(string(html))
+	fmt.Println(pageOut)
 	return pageOut
 }
 
 func insertIntoTemplate(html string) string {
-	var realTemplatePath string = "../testing/templates/" + templatePath
+	var realTemplatePath string = serverRoot + "/templates/" + templatePath
 	data, err := os.ReadFile(realTemplatePath)
 	if err != nil {
 		fmt.Printf("Template file \"%s\" not found.\n", realTemplatePath)
@@ -122,7 +201,8 @@ func insertIntoTemplate(html string) string {
 		}
 
 	}
-	var arrOut []string = slices.Insert(templateArr, peppagesIdx, html)
+	var arrTemp []string = remove(templateArr, peppagesIdx)
+	var arrOut []string = slices.Insert(arrTemp, peppagesIdx, html)
 
 	var strOut string
 	for _, line := range arrOut {
