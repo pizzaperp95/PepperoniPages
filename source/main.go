@@ -1,6 +1,7 @@
 package main
 
 import (
+	"slices"
 	"strings"
 
 	"github.com/gomarkdown/markdown"
@@ -13,12 +14,27 @@ import (
 	"os"
 )
 
-func remove(slice []string, s int) []string { // thanks stackoverflow user :3
-	return append(slice[:s], slice[s+1:]...)
+var templatePath string = ""
+var serverRoot string = "../testing"
+
+func remove(arr []string, s int) []string {
+	var newArr []string
+	for idx, line := range arr {
+		if idx != s {
+			newArr = append(newArr, line)
+		}
+	}
+	return newArr
 }
 
 func peppagesHandler(response http.ResponseWriter, request *http.Request) {
-	fmt.Fprintf(response, generatePage("../testing/pages/noelle.p2f"))
+	fmt.Println(request.URL.Path)
+	//response.Header().Set("Content-Type", "text/html")
+	if request.URL.Path[len(request.URL.Path)-1:] == "/" {
+		fmt.Fprintf(response, generatePage(("../testing/pages" + request.URL.Path + "/index.p2f")))
+	} else {
+		fmt.Fprintf(response, generatePage(("../testing/pages" + request.URL.Path + ".p2f")))
+	}
 }
 
 func generatePage(page string) string {
@@ -27,34 +43,103 @@ func generatePage(page string) string {
 		return ""
 	}
 
-	md := []byte(parseP2F(string(data)))
-	html := mdToHTML(md)
+	var md []byte = []byte(parseP2F(string(data)))
+	var html []byte = mdToHTML(md)
+	var pageOut string = insertIntoTemplate(string(html))
+	return pageOut
+}
 
-	return string(html)
+func insertIntoTemplate(html string) string {
+	var realTemplatePath string = "../testing/templates/" + templatePath
+	data, err := os.ReadFile(realTemplatePath)
+	if err != nil {
+		fmt.Printf("Template file \"%s\" not found.\n", realTemplatePath)
+		return html
+	}
+	var templateString string = string(data)
+	var templateArr = strings.Split(templateString, "\n")
+	var peppagesIdx int
+	for idx, line := range templateArr {
+		noWhitespace := strings.ReplaceAll(line, " ", "")
+		if noWhitespace == "<pepperonipages>" {
+			peppagesIdx = idx
+		}
+
+	}
+	var arrOut []string = slices.Insert(templateArr, peppagesIdx, html)
+
+	var strOut string
+	for _, line := range arrOut {
+		strOut = fmt.Sprintf("%s%s\n", strOut, line)
+	}
+	return strOut
+}
+
+func stripTags(lines *[]string) *[]string {
+	var workingArray []string = *lines
+	mdstartFound := false
+	fileFinished := false
+	for {
+
+		for idx, line := range workingArray {
+			linesplit := strings.Split(line, " ")
+			tag := strings.ToLower(strings.Split(linesplit[0], "=")[0])
+			if tag == "mdstart" {
+				workingArray = remove(workingArray, idx)
+				mdstartFound = true
+				break
+			} else if tag == "p2formatver" {
+				workingArray = remove(workingArray, idx)
+				break
+			} else if tag == "mdend" {
+				workingArray = remove(workingArray, idx)
+				break
+			} else if tag == "template" {
+				templatePath = strings.Split(linesplit[0], "=")[1]
+				workingArray = remove(workingArray, idx)
+				break
+			} else if !mdstartFound {
+				workingArray = remove(workingArray, idx)
+			}
+			if idx == len(workingArray)-1 {
+				fileFinished = true
+			}
+		}
+
+		if fileFinished {
+			break
+		}
+	}
+	// for idx, line := range workingArray {
+	// 	linesplit := strings.Split(line, " ")
+	// 	tag := strings.ToLower(strings.Split(linesplit[0], "=")[0])
+	// 	if tag == "mdstart" {
+	// 		workingArray = remove(workingArray, idx)
+	// 		mdstartFound = true
+	// 	}
+	// 	if tag == "p2formatver" || tag == "mdend" {
+	// 		workingArray = remove(workingArray, idx)
+	// 	}
+	// 	if mdstartFound == false {
+	// 		fmt.Println("meow")
+	// 	}
+	// }
+	return &workingArray
+
 }
 
 func parseP2F(p2f string) string {
+	templatePath = ""
 	var p2fLines []string
 	var p2fReturn string
 
 	p2fLines = strings.Split(p2f, "\n")
 	var workingArray []string
 
-	//mdstartFound := false
-	for idx, line := range p2fLines {
-		linesplit := strings.Split(line, " ")
-		if strings.ToUpper(linesplit[0]) != "mdstart" {
-			workingArray = remove(p2fLines, idx)
-		} else {
-			//mdstartFound = true
-			workingArray = remove(p2fLines, idx)
-		}
-	}
+	workingArray = *stripTags(&p2fLines)
 
-	p2fLines = workingArray
 	for _, line := range workingArray {
-		p2fReturn = fmt.Sprintf("%s%s\n", workingArray, line)
-		print(line, "\n")
+		p2fReturn = fmt.Sprintf("%s%s\n", p2fReturn, line)
 	}
 	return p2fReturn
 }
@@ -69,7 +154,7 @@ func mdToHTML(md []byte) []byte { // this function is shamelessly stolen from th
 	htmlFlags := html.CommonFlags | html.HrefTargetBlank
 	opts := html.RendererOptions{Flags: htmlFlags}
 	renderer := html.NewRenderer(opts)
-
+	//fmt.Println(string(markdown.Render(doc, renderer)))
 	return markdown.Render(doc, renderer)
 }
 
