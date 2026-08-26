@@ -258,20 +258,7 @@ func stripTags(lines *[]string) *[]string {
 			break
 		}
 	}
-	// for idx, line := range workingArray {
-	// 	linesplit := strings.Split(line, " ")
-	// 	tag := strings.ToLower(strings.Split(linesplit[0], "=")[0])
-	// 	if tag == "mdstart" {
-	// 		workingArray = remove(workingArray, idx)
-	// 		mdstartFound = true
-	// 	}
-	// 	if tag == "p2formatver" || tag == "mdend" {
-	// 		workingArray = remove(workingArray, idx)
-	// 	}
-	// 	if mdstartFound == false {
-	// 		fmt.Println("meow")
-	// 	}
-	// }
+
 	return &workingArray
 
 }
