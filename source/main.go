@@ -32,8 +32,9 @@ func remove(arr []string, s int) []string {
 }
 
 func getMime(fileExt string) string {
-	//fmt.Println(fileExt)
 	switch fileExt {
+	case "html":
+		return "text/html"
 	case "css":
 		return "text/css"
 	case "js":
@@ -84,7 +85,7 @@ func getFileDirectoryAndType(response http.ResponseWriter, request *http.Request
 		}
 	}
 
-	//fmt.Println(pathNoExt, pathNoExtStr)
+	fmt.Println(filePath)
 
 	for _, seg := range serverPaths {
 		fmt.Println(seg)
@@ -106,18 +107,29 @@ func getFileDirectoryAndType(response http.ResponseWriter, request *http.Request
 			break
 
 		} else if errors.Is(err, os.ErrNotExist) {
-			fileFound = false
+			// world's hackiest hacky hack ever to have hacked. I should be beaten with hammers for this.
+			if _, err := os.Stat(serverRoot + "/" + seg + pathNoExtStr + "/index." + workingExt); err == nil {
+				fileFound = true
+				//fileFoundDir = seg
+				foundFileExt = workingExt
+				fileFoundPath = (serverRoot + "/" + seg + pathNoExtStr + "/index." + workingExt)
+				break
+			} else {
+				fileFound = false
+			}
 		} else {
 			fileFound = false
 		}
 	}
 
 	if !fileFound {
-		http.Error(response, reqErr404(), http.StatusNotFound)
+		response.Header().Set("Content-Type", "text/html")
 		fmt.Fprintf(response, reqErr404())
+		//http.Error(response, reqErr404(), http.StatusNotFound)
 		return
 	} else {
 		if fileTypeIsPage {
+			response.Header().Set("Content-Type", "text/html")
 			if foundFileExt == "p2f" {
 				fmt.Fprintf(response, generatePage(fileFoundPath))
 			} else {
